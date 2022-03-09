@@ -1,4 +1,4 @@
 # CountPrimes
 python learning
 
-take notes for what I've done while try and error
+Take note of what I did with trial and error
