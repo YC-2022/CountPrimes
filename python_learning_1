@@ -1,0 +1,70 @@
+#Given an integer n, return the number of prime numbers that are strictly less than n
+
+# 1). 一開始把之前面試題自己寫的答案丟進去
+import pandas as pd
+
+class Solution:
+    def countPrimes(self, n: int) -> int:
+		    out = []
+		    for i in range (2, n):
+		        length = i - 2
+		        tar = pd.DataFrame([i]*length, columns = ["n"])
+		        ref = pd.DataFrame(range(2, i), columns = ["num"])
+		        if all(tar.n%ref.num != 0) == True:
+		            out.append(i)
+		    return out
+
+#2). 後來發現出錯, 才注意到面試題跟Leetcode考題不同, 於是再修正 (粗心人)
+#    面試題是要把所有質數列出來, Leetcode是要解出質數有幾個
+
+class Solution:
+    def countPrimes(self, n: int) -> int:
+		    primes = []
+		    for i in range (2, n):
+		        length = i - 2
+		        tar = pd.DataFrame([i]*length, columns = ["n"])
+		        ref = pd.DataFrame(range(2, i), columns = ["num"])
+		        if all(tar.n%ref.num != 0) == True:
+		            primes.append(i)
+		    out = len(primes)             
+		    return out
+        
+#3). 但(2)又出錯, 以為是忘記寫 import pandas as pd. 看錯誤訊息才知道沒有import package這件事情. 
+#    每到這時候就會自己嚇自己, 想說是不是很難怎麼辦. (像上次面試以為題目很難都放棄, 事後有時間再重看題目, 其實蠻基礎題…) 
+#    這次又是自己嚇自己. 雖然test case正確, 可是跑實際case被表示超出時間了…
+
+class Solution:
+    def countPrimes(self, n: int) -> int:
+		    primes = []  # final output
+		    for i in range (2, n): # 3
+		        j = 2
+		        notFactors = []
+		        while((i%j!=0) & (i>j)): # 是質數, 而且比檢查數還小才行進來
+		            notFactors.append(j)
+		            j = j + 1
+		        if len(notFactors) == (i-2):
+		            primes.append(i)
+		    out = len(primes)             
+		    return out
+
+# 4). 看了其他強者寫的code, 覺得自己真是太幼幼班了. 稍微調整一下成為自己熟悉一點的風格~(謝謝強者分享)繼續加油! #sieve of Eratosthenes
+
+def countPrimes(n):
+        if n == 0:
+            return 0
+        prime = [True] * n
+        i = 2
+        while i*i < n:
+            if prime [i] == True:
+                for j in range (i*i, n, i):
+                    prime [j] = False
+            i += 1
+				primes = [i for i in range(2, n) if prime[i]]
+        out = len(primes)
+        return out
+        
+#心得：
+#要看清楚題目
+#目前還沒很了解為什麼自己寫的跟別人寫的有顯著差異, 猜是…
+#for loop的檢查效益, 強者寫的檢查過的數值就不會再重複被檢查到了吧~
+#歡迎建議, 指教! 也希望自己小小的心得分享可以幫助有一樣問題的人~
